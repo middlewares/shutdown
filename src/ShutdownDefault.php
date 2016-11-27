@@ -2,7 +2,7 @@
 
 namespace Middlewares;
 
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class ShutdownDefault
@@ -10,11 +10,11 @@ class ShutdownDefault
     /**
      * Execute the shutdown handler.
      *
-     * @param RequestInterface $request
+     * @param ServerRequestInterface $request
      *
      * @return ResponseInterface
      */
-    public function __invoke(RequestInterface $request)
+    public function __invoke(ServerRequestInterface $request)
     {
         echo <<<'EOT'
 <!DOCTYPE html>

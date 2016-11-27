@@ -3,9 +3,10 @@
 namespace Middlewares\Tests;
 
 use Middlewares\Shutdown;
-use Zend\Diactoros\Request;
+use Middlewares\Utils\Dispatcher;
+use Middlewares\Utils\CallableMiddleware;
+use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\Response;
-use mindplay\middleman\Dispatcher;
 
 class ShutdownTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,10 +14,10 @@ class ShutdownTest extends \PHPUnit_Framework_TestCase
     {
         $response = (new Dispatcher([
             new Shutdown(),
-            function () {
+            new CallableMiddleware(function () {
                 return new Response();
-            },
-        ]))->dispatch(new Request());
+            }),
+        ]))->dispatch(new ServerRequest());
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals(503, $response->getStatusCode());
