@@ -6,9 +6,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Interop\Http\Middleware\DelegateInterface;
+use DateTimeInterface;
 
 class Shutdown implements ServerMiddlewareInterface
 {
+    const RETRY_AFTER = 'Retry-After';
+
     /**
      * @var callable|string The handler used
      */
@@ -18,6 +21,11 @@ class Shutdown implements ServerMiddlewareInterface
      * @var array Extra arguments passed to the handler
      */
     private $arguments = [];
+
+    /**
+     * @var DateTimeInterface|int|null Extra arguments passed to the handler
+     */
+    private $retryAfter;
 
     /**
      * Constructor.
@@ -42,6 +50,21 @@ class Shutdown implements ServerMiddlewareInterface
     }
 
     /**
+     * Estimated time when the downtime will be complete.
+     * (integer for relative seconds or DateTimeInterface).
+     *
+     * @param DateTimeInterface|int $retryAfter
+     *
+     * @return self
+     */
+    public function retryAfter($retryAfter)
+    {
+        $this->retryAfter = $retryAfter;
+
+        return $this;
+    }
+
+    /**
      * Process a request and return a response.
      *
      * @param ServerRequestInterface $request
@@ -54,6 +77,16 @@ class Shutdown implements ServerMiddlewareInterface
         $arguments = array_merge([$request], $this->arguments);
         $callable = Utils\CallableHandler::resolve($this->handler, $arguments);
 
-        return Utils\CallableHandler::execute($callable, $arguments)->withStatus(503);
+        $response = Utils\CallableHandler::execute($callable, $arguments)->withStatus(503);
+
+        if (is_int($this->retryAfter)) {
+            return $response->withHeader(self::RETRY_AFTER, (string) $this->retryAfter);
+        }
+
+        if ($this->retryAfter instanceof DateTimeInterface) {
+            return $response->withHeader(self::RETRY_AFTER, $this->retryAfter->format('D, d M Y H:i:s \G\M\T'));
+        }
+
+        return $response;
     }
 }

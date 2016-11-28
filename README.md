@@ -27,7 +27,7 @@ composer require middlewares/shutdown
 
 ```php
 $dispatcher = new Dispatcher([
-	new Middlewares\Shutdown()
+	(new Middlewares\Shutdown())->retryAfter(60 * 5)
 ]);
 
 $response = $dispatcher->dispatch(new ServerRequest());
@@ -55,6 +55,10 @@ $response = $dispatcher->dispatch(new Request());
 ```
 
 If it's not provided, [the default](src/ShutdownDefault.php) will be used.
+
+#### `retryAfter(int|DateTimeInterface $duration)`
+
+If known, the length of the downtime in seconds or the estimated date and time when the downtime will be complete. [More info about why this](https://webmasters.googleblog.com/2011/01/how-to-deal-with-planned-site-downtime.html)
 
 #### `arguments(...$args)`
 
