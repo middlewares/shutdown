@@ -4,17 +4,14 @@ namespace Middlewares\Tests;
 
 use Middlewares\Shutdown;
 use Middlewares\Utils\Dispatcher;
-use Middlewares\Utils\Factory;
 
 class ShutdownTest extends \PHPUnit_Framework_TestCase
 {
     public function testShutdown()
     {
-        $request = Factory::createServerRequest();
-
-        $response = (new Dispatcher([
+        $response = Dispatcher::run([
             new Shutdown(),
-        ]))->dispatch($request);
+        ]);
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals(503, $response->getStatusCode());
@@ -36,11 +33,9 @@ class ShutdownTest extends \PHPUnit_Framework_TestCase
      */
     public function testRetryAfter($duration, $header)
     {
-        $request = Factory::createServerRequest();
-
-        $response = (new Dispatcher([
+        $response = Dispatcher::run([
             (new Shutdown())->retryAfter($duration),
-        ]))->dispatch($request);
+        ]);
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals(503, $response->getStatusCode());
