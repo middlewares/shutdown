@@ -4,11 +4,11 @@ namespace Middlewares;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
 use DateTimeInterface;
 
-class Shutdown implements ServerMiddlewareInterface
+class Shutdown implements MiddlewareInterface
 {
     const RETRY_AFTER = 'Retry-After';
 
