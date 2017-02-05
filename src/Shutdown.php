@@ -2,6 +2,7 @@
 
 namespace Middlewares;
 
+use Middlewares\Utils\CallableResolver\ReflectionResolver;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
@@ -75,7 +76,7 @@ class Shutdown implements MiddlewareInterface
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
         $arguments = array_merge([$request], $this->arguments);
-        $callable = Utils\CallableHandler::resolve($this->handler, $arguments);
+        $callable = (new ReflectionResolver())->resolve($this->handler, $arguments);
 
         $response = Utils\CallableHandler::execute($callable, $arguments)->withStatus(503);
 
