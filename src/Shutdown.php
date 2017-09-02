@@ -2,12 +2,12 @@
 
 namespace Middlewares;
 
-use Middlewares\Utils\CallableResolver\ReflectionResolver;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
-use Interop\Http\ServerMiddleware\DelegateInterface;
 use DateTimeInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Middlewares\Utils\CallableResolver\ReflectionResolver;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Shutdown implements MiddlewareInterface
 {

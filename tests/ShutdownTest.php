@@ -2,9 +2,9 @@
 
 namespace Middlewares\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Middlewares\Shutdown;
 use Middlewares\Utils\Dispatcher;
+use PHPUnit\Framework\TestCase;
 
 class ShutdownTest extends TestCase
 {
@@ -31,6 +31,8 @@ class ShutdownTest extends TestCase
 
     /**
      * @dataProvider retryAfterProvider
+     * @param mixed $duration
+     * @param mixed $header
      */
     public function testRetryAfter($duration, $header)
     {
