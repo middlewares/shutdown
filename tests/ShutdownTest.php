@@ -2,10 +2,11 @@
 
 namespace Middlewares\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Middlewares\Shutdown;
 use Middlewares\Utils\Dispatcher;
 
-class ShutdownTest extends \PHPUnit_Framework_TestCase
+class ShutdownTest extends TestCase
 {
     public function testShutdown()
     {
