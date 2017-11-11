@@ -1,18 +1,14 @@
 <?php
+declare(strict_types = 1);
 
 namespace Middlewares;
 
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class ShutdownDefault
 {
     /**
      * Execute the shutdown handler.
-     *
-     * @param ServerRequestInterface $request
-     *
-     * @return ResponseInterface
      */
     public function __invoke(ServerRequestInterface $request)
     {

@@ -1,11 +1,12 @@
 <?php
+declare(strict_types = 1);
 
 namespace Middlewares;
 
 use DateTimeInterface;
 use Interop\Http\Server\MiddlewareInterface;
 use Interop\Http\Server\RequestHandlerInterface;
-use Middlewares\Utils\CallableResolver\ReflectionResolver;
+use Middlewares\Utils\CallableHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -40,12 +41,10 @@ class Shutdown implements MiddlewareInterface
 
     /**
      * Extra arguments passed to the handler.
-     *
-     * @return self
      */
-    public function arguments()
+    public function arguments(...$arguments): self
     {
-        $this->arguments = func_get_args();
+        $this->arguments = $arguments;
 
         return $this;
     }
@@ -55,10 +54,8 @@ class Shutdown implements MiddlewareInterface
      * (integer for relative seconds or DateTimeInterface).
      *
      * @param DateTimeInterface|int $retryAfter
-     *
-     * @return self
      */
-    public function retryAfter($retryAfter)
+    public function retryAfter($retryAfter): self
     {
         $this->retryAfter = $retryAfter;
 
@@ -67,18 +64,12 @@ class Shutdown implements MiddlewareInterface
 
     /**
      * Process a request and return a response.
-     *
-     * @param ServerRequestInterface  $request
-     * @param RequestHandlerInterface $handler
-     *
-     * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $arguments = array_merge([$request], $this->arguments);
-        $callable = (new ReflectionResolver())->resolve($this->handler, $arguments);
+        $callable = new CallableHandler($this->handler, $this->arguments);
 
-        $response = Utils\CallableHandler::execute($callable, $arguments)->withStatus(503);
+        $response = $callable->handle($request)->withStatus(503);
 
         if (is_int($this->retryAfter)) {
             return $response->withHeader(self::RETRY_AFTER, (string) $this->retryAfter);
