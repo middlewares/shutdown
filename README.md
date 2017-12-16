@@ -35,35 +35,13 @@ $response = $dispatcher->dispatch(new ServerRequest());
 
 ## Options
 
-#### `__construct(string|callable $handler = null)`
+#### `__construct(Interop\Http\Server\RequestHandlerInterface $handler = null)`
 
-Assign the callable used to generate the response. It can be a callable or a string with the format `Class::method`. The signature of the handler is the following:
-
-```php
-use Psr\Http\Message\RequestInterface;
-
-$handler = function (RequestInterface $request) {
-    //Any output is captured and added to the body stream
-    echo 'Site under maintenance';
-};
-
-$dispatcher = new Dispatcher([
-    new Middlewares\Shutdown($handler)
-]);
-
-$response = $dispatcher->dispatch(new Request());
-```
-
-If it's not provided, [the default](src/ShutdownDefault.php) will be used.
+The request handler used to generate the response. If it's not provided, [the default](src/ShutdownDefault.php) will be used.
 
 #### `retryAfter(int|DateTimeInterface $duration)`
 
 If known, the length of the downtime in seconds or the estimated date and time when the downtime will be complete. [More info about why this](https://webmasters.googleblog.com/2011/01/how-to-deal-with-planned-site-downtime.html)
-
-#### `arguments(...$args)`
-
-Extra arguments to pass to the error handler.
-
 
 ---
 

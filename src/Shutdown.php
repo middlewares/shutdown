@@ -6,7 +6,6 @@ namespace Middlewares;
 use DateTimeInterface;
 use Interop\Http\Server\MiddlewareInterface;
 use Interop\Http\Server\RequestHandlerInterface;
-use Middlewares\Utils\CallableHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -14,39 +13,12 @@ class Shutdown implements MiddlewareInterface
 {
     const RETRY_AFTER = 'Retry-After';
 
-    /**
-     * @var callable|string The handler used
-     */
     private $handler;
-
-    /**
-     * @var array Extra arguments passed to the handler
-     */
-    private $arguments = [];
-
-    /**
-     * @var DateTimeInterface|int|null Extra arguments passed to the handler
-     */
     private $retryAfter;
 
-    /**
-     * Constructor.
-     *
-     * @param callable|string|null $handler
-     */
-    public function __construct($handler = 'Middlewares\\ShutdownDefault')
+    public function __construct(RequestHandlerInterface $handler = null)
     {
         $this->handler = $handler;
-    }
-
-    /**
-     * Extra arguments passed to the handler.
-     */
-    public function arguments(...$arguments): self
-    {
-        $this->arguments = $arguments;
-
-        return $this;
     }
 
     /**
@@ -67,9 +39,9 @@ class Shutdown implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $callable = new CallableHandler($this->handler, $this->arguments);
+        $requestHandler = $this->handler ?: new ShutdownDefault();
 
-        $response = $callable->handle($request)->withStatus(503);
+        $response = $requestHandler->handle($request)->withStatus(503);
 
         if (is_int($this->retryAfter)) {
             return $response->withHeader(self::RETRY_AFTER, (string) $this->retryAfter);

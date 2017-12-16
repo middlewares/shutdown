@@ -3,16 +3,17 @@ declare(strict_types = 1);
 
 namespace Middlewares;
 
+use Interop\Http\Server\RequestHandlerInterface;
+use Middlewares\Utils\Factory;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ShutdownDefault
+class ShutdownDefault implements RequestHandlerInterface
 {
-    /**
-     * Execute the shutdown handler.
-     */
-    public function __invoke(ServerRequestInterface $request)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        echo <<<'EOT'
+        $response = Factory::createResponse(503);
+        $response->getBody()->write(<<<'EOT'
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,6 +26,9 @@ class ShutdownDefault
     <h1>Site under maintenance</h1>
 </body>
 </html>
-EOT;
+EOT
+        );
+
+        return $response;
     }
 }
