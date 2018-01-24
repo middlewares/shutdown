@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 namespace Middlewares;
 
-use Psr\Http\Server\RequestHandlerInterface;
 use Middlewares\Utils\Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class ShutdownDefault implements RequestHandlerInterface
 {
