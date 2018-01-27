@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Middlewares\Tests;
 
@@ -14,13 +15,12 @@ class ShutdownTest extends TestCase
             new Shutdown(),
         ]);
 
-        $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals(503, $response->getStatusCode());
         $this->assertFalse($response->hasHeader('Retry-After'));
         $this->assertNotFalse(strpos((string) $response->getBody(), 'Site under maintenance'));
     }
 
-    public function retryAfterProvider()
+    public function retryAfterProvider(): array
     {
         return [
             [120, '120'],
@@ -31,10 +31,10 @@ class ShutdownTest extends TestCase
 
     /**
      * @dataProvider retryAfterProvider
-     * @param mixed $duration
-     * @param mixed $header
+     *
+     * @param int|DateTimeInterface $duration
      */
-    public function testRetryAfter($duration, $header)
+    public function testRetryAfter($duration, string $header)
     {
         $response = Dispatcher::run([
             (new Shutdown())->retryAfter($duration),
