@@ -40,7 +40,6 @@ class ShutdownTest extends TestCase
             (new Shutdown())->retryAfter($duration),
         ]);
 
-        $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals(503, $response->getStatusCode());
         $this->assertEquals($header, $response->getHeaderLine('Retry-After'));
         $this->assertNotFalse(strpos((string) $response->getBody(), 'Site under maintenance'));
