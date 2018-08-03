@@ -4,15 +4,25 @@ declare(strict_types = 1);
 namespace Middlewares;
 
 use Middlewares\Utils\Factory;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 class ShutdownDefault implements RequestHandlerInterface
 {
+    private $responseFactory;
+
+    public function __construct(ResponseFactoryInterface $responseFactory = null)
+    {
+        $this->responseFactory = $responseFactory;
+    }
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $response = Factory::createResponse(503);
+        $responseFactory = $this->responseFactory ?: Factory::getResponseFactory();
+
+        $response = $responseFactory->createResponse(503);
         $response->getBody()->write(<<<'EOT'
 <!DOCTYPE html>
 <html>
