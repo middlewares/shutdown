@@ -84,6 +84,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 First version
 
+
+[1.1.0]: https://github.com/middlewares/shutdown/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/middlewares/shutdown/compare/v0.7.0...v1.0.0
 [0.7.0]: https://github.com/middlewares/shutdown/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/middlewares/shutdown/compare/v0.5.0...v0.6.0
