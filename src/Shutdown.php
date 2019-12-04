@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Middlewares;
 
 use DateTimeInterface;
+use Middlewares\Utils\Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -13,12 +14,24 @@ class Shutdown implements MiddlewareInterface
 {
     const RETRY_AFTER = 'Retry-After';
 
-    private $handler;
+    /**
+     * @var callable
+     */
+    private $render;
+
+    /**
+     * @var DateTimeInterface|int|null
+     */
     private $retryAfter;
 
-    public function __construct(RequestHandlerInterface $handler = null)
+    /**
+     * @var ResponseFactoryInterface
+     */
+    private $responseFactory;
+
+    public function __construct(ResponseFactoryInterface $responseFactory = null)
     {
-        $this->handler = $handler;
+        $this->responseFactory = $responseFactory ?: Factory::getResponseFactory();
     }
 
     /**
@@ -35,13 +48,24 @@ class Shutdown implements MiddlewareInterface
     }
 
     /**
+     * The function to render the html body
+     */
+    public function render(callable $render): self
+    {
+        $this->render = $render;
+
+        return $this;
+    }
+
+    /**
      * Process a request and return a response.
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $requestHandler = $this->handler ?: new ShutdownDefault();
+        $response = $this->responseFactory->createResponse(503);
 
-        $response = $requestHandler->handle($request)->withStatus(503);
+        $render = $this->render ?: new ShutdownRender();
+        $response->getBody()->write((string) $render($request));
 
         if (is_int($this->retryAfter)) {
             return $response->withHeader(self::RETRY_AFTER, (string) $this->retryAfter);
