@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.1] - 2020-12-02
+### Added
+- Support for PHP 8
+
 ## [2.0.0] - 2019-12-05
 ### Added
 - New `render()` option, that accepts a callable to generate the html content
@@ -72,6 +76,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 0.1.0 - 2016-10-08
 First version
 
+[2.0.1]: https://github.com/middlewares/shutdown/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/middlewares/shutdown/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/middlewares/shutdown/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/middlewares/shutdown/compare/v0.7.0...v1.0.0
