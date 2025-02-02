@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.2] - 2025-02-02
 ### Fixed
-- Support for PHP 8.4
+- Support for PHP 8.4 [#3]
 
 ## [2.0.1] - 2020-12-02
 ### Added
@@ -78,6 +78,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.1.0] - 2016-10-08
 First version
+
+[#3]: https://github.com/middlewares/shutdown/issues/3
 
 [2.0.2]: https://github.com/middlewares/shutdown/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/middlewares/shutdown/compare/v2.0.0...v2.0.1
