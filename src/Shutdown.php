@@ -16,7 +16,7 @@ class Shutdown implements MiddlewareInterface
     const RETRY_AFTER = 'Retry-After';
 
     /**
-     * @var callable
+     * @var callable|null
      */
     private $render;
 
@@ -30,7 +30,7 @@ class Shutdown implements MiddlewareInterface
      */
     private $responseFactory;
 
-    public function __construct(ResponseFactoryInterface $responseFactory = null)
+    public function __construct(?ResponseFactoryInterface $responseFactory = null)
     {
         $this->responseFactory = $responseFactory ?: Factory::getResponseFactory();
     }
