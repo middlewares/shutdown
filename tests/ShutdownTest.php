@@ -38,9 +38,9 @@ class ShutdownTest extends TestCase
     /**
      * @dataProvider retryAfterProvider
      *
-     * @param int|DateTimeInterface $duration
+     * @param int|DateTime|DateTimeImmutable $duration
      */
-    public function testRetryAfter(int|DateTime|DateTimeImmutable $duration, string $header): void
+    public function testRetryAfter($duration, string $header): void
     {
         $response = Dispatcher::run([
             (new Shutdown())->retryAfter($duration),

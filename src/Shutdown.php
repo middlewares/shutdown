@@ -13,7 +13,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class Shutdown implements MiddlewareInterface
 {
-    const RETRY_AFTER = 'Retry-After';
+    public const RETRY_AFTER = 'Retry-After';
 
     /**
      * @var callable|null
